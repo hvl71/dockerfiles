@@ -4,9 +4,8 @@ FROM mcr.microsoft.com/windows/servercore/iis:20200310-windowsservercore-ltsc201
 #From the above link:
 #There is no need to specify an ENTRYPOINT in your Dockerfile since the microsoft/iis base image already includes an entrypoint application that monitors the status of the IIS World Wide Web Publishing Service (W3SVC).
 
-#delete iisstar.htm at image creation time
-RUN del c:\\inetpub\\wwwroot\\iisstart.htm
+RUN powershell -NoProfile -Command Remove-Item -Recurse C:\inetpub\wwwroot\*
 
-#try to write new content (in a real setup we would copy in contens from a previous build process I guess)
-RUN ["echo","WIN-WEB1",">","c:\\inetpub\\wwwroot\\index.html"]
+WORKDIR /inetpub/wwwroot
 
+COPY content/ .
